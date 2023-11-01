@@ -1,0 +1,50 @@
+const express = require("express");
+const path = require("path");
+const port = 3000;
+const app = express();
+const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
+
+//Body parser stuff
+app.use(bodyParser.urlencoded({ extended: true }));
+
+//Routes
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Connect to MongoDB
+mongoose.connect('mongodb://localhost:27017/members-only-proj', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+}, console.log("connected to database"));
+
+//Catches mongodb connection error
+const db = mongoose.connection;
+db.on("error", console.error.bind(console, "mongo connection error"));
+
+const UsersModel = mongoose.model('Users', new mongoose.Schema({
+    // Define your data schema here
+    email: String,
+    password: String,
+    // Add more fields as needed
+}));
+
+
+app.post("/sign-up.html", async (req, res, next) => {//Post needs to be the same as the file page location
+    try {
+        const users = new UsersModel({
+            email: req.body.email,
+            password: req.body.password
+        });
+        const result = await users.save();
+        res.redirect("log-in.html");
+        console.log(result);
+    } catch (err) {
+        console.log("Error")
+        return next(err);
+        };
+});
+
+
+app.listen(port, () => {
+    console.log(`Example app listening on port http://localhost:${port}/sign-up.html`)
+});
