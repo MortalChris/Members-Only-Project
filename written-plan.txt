@@ -1,0 +1,18 @@
+Project: Members Only
+
+First Page
+	-Sign Up page
+		-email field
+		-Password field
+		-Confirm password field
+			-Get uploaded to the database
+	-After signed up go to login page
+Second Page
+	-Secret password allows you to go to the next page
+Third page
+	-Login Page
+		-Checks the database for created users
+			-if(login)
+				go to next page
+			-else
+				display error of not having correct credentials
