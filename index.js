@@ -23,26 +23,27 @@ db.on("error", console.error.bind(console, "mongo connection error"));
 
 const UsersModel = mongoose.model('Users', new mongoose.Schema({
     // Define your data schema here
-    email: String,
-    password: String,
+    email: { type: String, required: true},
+    password: { type: String, required: true},
     // Add more fields as needed
 }));
 
 
-app.post("/sign-up.html", async (req, res, next) => {//Post needs to be the same as the file page location
-    try {
-        const users = new UsersModel({
-            email: req.body.email,
-            password: req.body.password
+        app.post("/sign-up.html", async (req, res, next) => {//Post needs to be the same as the file page location
+            try {
+                const users = new UsersModel({
+                    email: req.body.email,
+                    password: req.body.password
+                });
+                const result = await users.save();
+                res.redirect("log-in.html");
+                console.log(result);
+            } catch (err) {
+                console.log("Error");
+                res.redirect("sign-up.html");
+                return next(err);
+                };
         });
-        const result = await users.save();
-        res.redirect("log-in.html");
-        console.log(result);
-    } catch (err) {
-        console.log("Error")
-        return next(err);
-        };
-});
 
 
 app.listen(port, () => {
