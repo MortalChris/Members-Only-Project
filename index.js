@@ -4,6 +4,7 @@ const port = 3000;
 const app = express();
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const bcryptjs =require('bcryptjs');
 
 //Body parser stuff
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -29,18 +30,14 @@ const UsersModel = mongoose.model('Users', new mongoose.Schema({
     // Add more fields as needed
 }));
 
-
+//Sign Up
     app.post("/sign-up.html", async (req, res, next) => {//Post needs to be the same as the file page location
         try {
-            if (req.body.password !== req.body.confirmPassword) {
-                // Password and Confirm Password do not match
-                    // const pErrorText = document.getElementById("signup-error-p");
-                    // res.send("<p>Password and Confirm Password do not match</p>");
-                console.log("Password and Confirm Password do not match");
-                // throw new Error("Password and Confirm Password do not match");
-                // res.redirect("sign-up.html");
-                return;
-            }
+                if (req.body.password != req.body.confirmPassword ) {
+                    console.log("Password and Confirm Password do not match");
+                    res.redirect("errorSignUp.html");
+                    return;
+                }
             const users = new UsersModel({
                 email: req.body.email,
                 password: req.body.password,
@@ -51,16 +48,16 @@ const UsersModel = mongoose.model('Users', new mongoose.Schema({
             console.log(result);
         } catch (err) {
             console.log("Error");
-            // res.redirect("sign-up.html");
+            res.redirect("errorSignUp.html");
             return next(err);
             };
     });
 
+//Log-in
 
 
 
 
-    
 app.listen(port, () => {
     console.log(`Example app listening on port http://localhost:${port}/sign-up.html`)
 });
