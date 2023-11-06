@@ -24,7 +24,8 @@ db.on("error", console.error.bind(console, "mongo connection error"));
 const UsersModel = mongoose.model('Users', new mongoose.Schema({
     // Define your data schema here
     email: { type: String, required: true},
-    password: { type: String, required: true},
+    password: { type: String, required: true },
+    admin: {type: Boolean}
     // Add more fields as needed
 }));
 
@@ -34,26 +35,32 @@ const UsersModel = mongoose.model('Users', new mongoose.Schema({
             if (req.body.password !== req.body.confirmPassword) {
                 // Password and Confirm Password do not match
                     // const pErrorText = document.getElementById("signup-error-p");
-                    // pErrorText.textContent = "Password and Confirm Password do not match";
-                    console.log("Password and Confirm Password do not match");
-                res.redirect("sign-up.html");
+                    // res.send("<p>Password and Confirm Password do not match</p>");
+                console.log("Password and Confirm Password do not match");
+                // throw new Error("Password and Confirm Password do not match");
+                // res.redirect("sign-up.html");
                 return;
             }
             const users = new UsersModel({
                 email: req.body.email,
-                password: req.body.password
+                password: req.body.password,
+                admin: false
             });
             const result = await users.save();
             res.redirect("log-in.html");
             console.log(result);
         } catch (err) {
             console.log("Error");
-            res.redirect("sign-up.html");
+            // res.redirect("sign-up.html");
             return next(err);
             };
     });
 
 
+
+
+
+    
 app.listen(port, () => {
     console.log(`Example app listening on port http://localhost:${port}/sign-up.html`)
 });
