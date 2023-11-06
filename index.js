@@ -2,9 +2,14 @@ const express = require("express");
 const path = require("path");
 const port = 3000;
 const app = express();
+//server mongoose/ mongodb & bodyparse
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const bcryptjs =require('bcryptjs');
+//password hatcher
+const bcryptjs = require('bcryptjs');
+//Passportjs
+const passport = require('passport');
+const LocalStrategy = require('passport-local');
 
 //Body parser stuff
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -14,8 +19,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Connect to MongoDB
 mongoose.connect('mongodb://localhost:27017/members-only-proj', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
+    // useNewUrlParser: true,
+    // useUnifiedTopology: true
 }, console.log("connected to database"));
 
 //Catches mongodb connection error
@@ -53,10 +58,54 @@ const UsersModel = mongoose.model('Users', new mongoose.Schema({
             };
     });
 
-//Log-in
 
 
+// Log-in
+app.post("/log-in",
+    passport.authenticate("local", {
+        successRedirect: "secret-pass",
+        failureRedirect: "log-in"
+    })
+);
 
+// app.post("/log-in", async (req, res, next) => {
+//     try {
+//         res.redirect("secret-pass.html")
+//     } catch (err) {
+//         console.log("Error on log-in post");
+//         return next(err);
+//     };
+// });
+
+// passport.use(
+//     new LocalStrategy(async (email, password, done) => {
+//     try {
+//         const users = await UsersModel.findOne({ username: email });
+//         if (!users) {
+//             return done(null, false, { message: "Incorrect email" });
+//         };
+//         if (users.password !== password) {
+//             return done(null, false, { message: "Incorrect password" });
+//         };
+//             return done(null, users);
+//         } catch(err) {
+//             return done(err);
+//         };
+//     })
+// );
+
+// passport.serializeUser((users, done) => {
+//     done(null, users.id);
+// });
+
+// passport.deserializeUser(async (id, done) => {
+//     try {
+//         const user = await UsersModel.findById(id);
+//         done(null, user);
+//     } catch(err) {
+//         done(err);
+//     };
+// });
 
 app.listen(port, () => {
     console.log(`Example app listening on port http://localhost:${port}/sign-up.html`)
