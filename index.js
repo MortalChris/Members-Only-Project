@@ -42,10 +42,11 @@ const UsersModel = mongoose.model('Users', new mongoose.Schema({
                     console.log("Password and Confirm Password do not match");
                     res.redirect("errorSignUp.html");
                     return;
-                }
+            }
+            const hash = await bcryptjs.hash(req.body.password, 13);
             const users = new UsersModel({
                 email: req.body.email,
-                password: req.body.password,
+                password: hash,
                 admin: false
             });
             const result = await users.save();
