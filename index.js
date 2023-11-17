@@ -7,9 +7,11 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 //password hatcher
 const bcryptjs = require('bcryptjs');
-//Passportjs
+//Passportjs stuff
+const crypto = require('crypto');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
+const passportLocalMongoose = require('passport-local-mongoose');
 
 //Body parser stuff
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -43,10 +45,10 @@ const UsersModel = mongoose.model('Users', new mongoose.Schema({
                     res.redirect("errorSignUp.html");
                     return;
             }
-            const hash = await bcryptjs.hash(req.body.password, 13);
+            const hashedPassword = await bcryptjs.hash(req.body.password, 13);
             const users = new UsersModel({
                 email: req.body.email,
-                password: hash,
+                password: hashedPassword,
                 admin: false
             });
             const result = await users.save();
@@ -62,52 +64,32 @@ const UsersModel = mongoose.model('Users', new mongoose.Schema({
 
 
 // Log-in
-app.post("/log-in",
-    passport.authenticate("local", {
-        successRedirect: "secret-pass",
-        failureRedirect: "log-in"
-    })
-);
-
-// app.post("/log-in", async (req, res, next) => {
-//     try {
-//         res.redirect("secret-pass.html")
-//     } catch (err) {
-//         console.log("Error on log-in post");
-//         return next(err);
-//     };
-// });
-
-// passport.use(
-//     new LocalStrategy(async (email, password, done) => {
-//     try {
-//         const users = await UsersModel.findOne({ username: email });
-//         if (!users) {
-//             return done(null, false, { message: "Incorrect email" });
-//         };
-//         if (users.password !== password) {
-//             return done(null, false, { message: "Incorrect password" });
-//         };
-//             return done(null, users);
-//         } catch(err) {
-//             return done(err);
-//         };
-//     })
-// );
-
-// passport.serializeUser((users, done) => {
-//     done(null, users.id);
-// });
-
-// passport.deserializeUser(async (id, done) => {
-//     try {
-//         const user = await UsersModel.findById(id);
-//         done(null, user);
-//     } catch(err) {
-//         done(err);
-//     };
-// });
+app.post("/log-in", async function(req, res){ 
+    try {// check if the user exists 
+        const users = await UsersModel.findOne({ email: req.body.email });
+        console.log(users);
+        if (users) { //check if password matches 
+            const comparePass = await bcryptjs.compare(req.body.password, users.password)
+            // const result = req.body.password === users.password;
+            if (comparePass) {
+                res.redirect("secret-pass.html");
+            } else {
+                res.redirect("log-in.html");
+                console.log("password doesn't match");
+                // res.status(400).json({ error: "password doesn't match" });
+            }
+        } else {
+            res.redirect("log-in.html");
+            console.log("User doesn't exist");
+            // res.status(400).json({ error: "User doesn't exist" });
+        }
+    } catch (error) { 
+        console.log(error)
+        res.redirect("errorSignUp.html");
+        // res.status(400).json({ error }); 
+    } 
+}); 
 
 app.listen(port, () => {
-    console.log(`Example app listening on port http://localhost:${port}/sign-up.html`)
+    console.log(`Example app listening on port http://localhost:${port}/sign-up.html`);
 });
