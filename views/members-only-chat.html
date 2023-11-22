@@ -8,8 +8,14 @@
     <link rel="stylesheet" href="css/all.css">
   </head>
   <body>
+    <h1>Chat</h1>
     <div id="chat-container">
+      
     </div>
+    <form action="members-chat" method="POST">
+        <input type="text" name="message" id="message-input-chat" placeholder="Type your message here" required>
+        <button name="send-msg">Send</button>
+    </form>
 	<script src="index.js"></script>
   </body>
 </html>
