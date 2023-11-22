@@ -5,14 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Members Only Chat</title>
-    <link rel="stylesheet" href="css/all.css">
+    <link rel="stylesheet" href="css/chat.css">
   </head>
   <body>
     <h1>Chat</h1>
     <div id="chat-container">
-      
+      <ul>
+        <% messageBoard.forEach(function(message){ %>
+          <li><%= message.user %>: <%= message.text %></li>
+        <% }) %>
+      </ul>
     </div>
-    <form action="members-chat" method="POST">
+    <form action="/members-chat" method="POST">
         <input type="text" name="message" id="message-input-chat" placeholder="Type your message here" required>
         <button name="send-msg">Send</button>
     </form>
