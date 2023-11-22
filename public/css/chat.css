@@ -1,0 +1,22 @@
+*{
+    margin: 0;
+    padding: 0;
+    background-color: rgb(55, 55, 182);
+    color: white;
+}
+body{
+	display: flex;
+	flex-direction: column;
+	flex-wrap: nowrap;
+	justify-content: center;
+	align-items: center;
+	align-content: center;
+    margin-top: 5rem;
+    font-size: 2rem;
+}
+input{
+    font-size: 1.2rem
+}
+button{
+    font-size: 2rem;
+}
