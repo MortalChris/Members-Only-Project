@@ -58,7 +58,7 @@ app.get('/secretPass', function (req, res) {
     res.render('secret-pass');
 })
 app.get('/chat', function (req, res) {
-    res.render('members-only-chat');
+    res.render('members-only-chat', {messageBoard: messageBoard});
 })
 
 
@@ -91,12 +91,13 @@ app.get('/chat', function (req, res) {
 // Log-in
 app.post("/log-in", async function(req, res){ 
     try {// check if the user exists 
-        const users = await UsersModel.findOne({ email: req.body.email });
-        console.log(users);
-        if (users) { //check if password matches 
+        const usersEmail = await UsersModel.findOne({ email: req.body.email });
+        console.log(usersEmail);
+        if (usersEmail) { //check if password matches 
             const comparePass = await bcryptjs.compare(req.body.password, users.password)
             // const result = req.body.password === users.password;
             if (comparePass) {
+                username.push(usersEmail);
                 res.redirect("chat");
             } else {
                 res.redirect("logIn");
@@ -116,7 +117,15 @@ app.post("/log-in", async function(req, res){
 }); 
 
 //Message Board
+const username = ["happy"];
 const messageBoard = [];
+app.post("/members-chat", async function (req, res, next) {
+    const message = req.body.message;
+    messageBoard.push({ user: username, text: message });
+    console.log(username);
+    console.log(messageBoard);
+    res.redirect("chat");
+});
 
 
 app.listen(port, () => {
