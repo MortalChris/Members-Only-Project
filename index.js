@@ -54,6 +54,9 @@ app.get('/error', function (req, res) {
 app.get('/logIn', function (req, res) {
     res.render('log-in');
 })
+app.get('/logOut', function (req, res) {
+    res.render('log-out');
+})
 app.get('/secretPass', function (req, res) {
     res.render('secret-pass');
 })
@@ -115,6 +118,11 @@ app.post("/log-in", async function(req, res){
         // res.status(400).json({ error }); 
     } 
 }); 
+
+//Log out
+app.post("/log-out", async function (req, res) { 
+    username = "";
+})
 
 //Message Board
 const username = ["happy"];
