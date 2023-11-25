@@ -81,9 +81,15 @@ app.get('/chat', function (req, res) {
                 password: hashedPassword,
                 admin: false
             });
-            const result = await users.save();
-            res.redirect("logIn");
-            console.log(result);
+                const usersEmail = await UsersModel.findOne({ email: req.body.email });
+                if (!usersEmail) {
+                    const result = await users.save();
+                    console.log(result);
+                    res.redirect("logIn");
+                } else {
+                    console.log("Error");
+                    res.send("Email Already exist");
+                }
         } catch (err) {
             console.log("Error");
             res.redirect("error");
