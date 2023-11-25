@@ -17,10 +17,10 @@
         <label>Confirm Password</label><br>
           <input type="password" name="confirmPassword" id="confirm-password-input-signup" minlength="7" required><br>
         <button name="submit">Submit</button>
+        <% if (emailExistError) { %>
+          <p id="signup-error-p1"><%= errorMsg %></p>
+        <% } %>
       </form>
-      <% if (emailExistError) { %>
-        <p id="signup-error-p1"><%= errorMsg %></p>
-      <% } %>
 	<script src="index.js"></script>
   </body>
 </html>
