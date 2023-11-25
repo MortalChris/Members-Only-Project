@@ -3,6 +3,8 @@ const express = require("express");
 const path = require("path");
 const port = 3000;
 const app = express();
+// Express session
+const session = require('express-session');
 //ejs
 const ejs = require('ejs');
 app.engine('.html', require('ejs').__express);
@@ -89,7 +91,13 @@ app.get('/chat', function (req, res) {
             };
     });
 
-
+    app.use(session({
+        secret: 'omae wa mou shindeiru',
+        resave: true,
+        saveUninitialized: true,
+        maxAge: 3600000
+    }));
+    
 
 // Log-in
 app.post("/log-in", async function(req, res){ 
@@ -97,10 +105,13 @@ app.post("/log-in", async function(req, res){
         const usersEmail = await UsersModel.findOne({ email: req.body.email });
         console.log(usersEmail);
         if (usersEmail) { //check if password matches 
-            const comparePass = await bcryptjs.compare(req.body.password, users.password)
+            const comparePass = await bcryptjs.compare(req.body.password, usersEmail.password);
+            // const comparePass = await UsersModel.findOne({ email: req.body.password });
             // const result = req.body.password === users.password;
             if (comparePass) {
-                username.push(usersEmail);
+                req.session.loggedin = true;
+				req.session.username = usersEmail;
+                // username.push(usersEmail);
                 res.redirect("chat");
             } else {
                 res.redirect("logIn");
@@ -121,16 +132,24 @@ app.post("/log-in", async function(req, res){
 
 //Log out
 app.post("/log-out", async function (req, res) { 
-    username = "";
+    // username = "";
+    req.session.loggedin = false;
+    req.session.username = "";
+    res.redirect(signUp);
 })
 
 //Message Board
-const username = ["happy"];
+// const username = [];
 const messageBoard = [];
 app.post("/members-chat", async function (req, res, next) {
     const message = req.body.message;
-    messageBoard.push({ user: username, text: message });
-    console.log(username);
+    if (!req.session.username) {
+        res.redirect("error");
+        return;
+    } else {
+        messageBoard.push({ user: req.session.username.email, text: message });
+    }
+    console.log(req.session.username.email);
     console.log(messageBoard);
     res.redirect("chat");
 });
