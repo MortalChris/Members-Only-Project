@@ -21,3 +21,6 @@ input{
 button{
     font-size: 2rem;
 }
+#signup-error-p1{
+    font-size: 1.2rem;
+}
