@@ -48,7 +48,7 @@ const UsersModel = mongoose.model('Users', new mongoose.Schema({
 
 //Routes
 app.get('/signUp', function (req, res) {
-    res.render('sign-up');
+    res.render('sign-up', {emailExistError: emailExistError, errorMsg: "Email already exist"});
 })
 app.get('/error', function (req, res) {
     res.render('errorSignUp');
@@ -66,7 +66,7 @@ app.get('/chat', function (req, res) {
     res.render('members-only-chat', {messageBoard: messageBoard});
 })
 
-
+let emailExistError = false ;
 //Sign Up
     app.post("/sign-up", async (req, res, next) => {//Post needs to be the same as the file page location
         try {
@@ -74,7 +74,7 @@ app.get('/chat', function (req, res) {
                     console.log("Password and Confirm Password do not match");
                     res.redirect("error");
                     return;
-            }
+                }
             const hashedPassword = await bcryptjs.hash(req.body.password, 13);
             const users = new UsersModel({
                 email: req.body.email,
@@ -86,12 +86,15 @@ app.get('/chat', function (req, res) {
                     const result = await users.save();
                     console.log(result);
                     res.redirect("logIn");
+                    emailExistError = false;
                 } else {
-                    console.log("Error");
-                    res.send("Email Already exist");
+                    console.log("Error: Email already exist");
+                    emailExistError = true;
+                    res.redirect("signUp");
+                    // res.send("Email Already exist");
                 }
         } catch (err) {
-            console.log("Error");
+            console.log("err");
             res.redirect("error");
             return next(err);
             };
