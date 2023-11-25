@@ -3,6 +3,7 @@
     padding: 0;
     background-color: rgb(55, 55, 182);
     color: white;
+    list-style-type: none;
 }
 body{
 	display: flex;
