@@ -20,7 +20,10 @@
     <div id="chat-container">
       <ul>
         <% messageBoard.forEach(function(message){ %>
-          <li><%= message.user %>: <%= message.text %></li>
+          <div>
+            <li><%= message.user %>: <%= message.text %></li>
+            <li id="text-output-date"><%= message.date   %>
+          </div>
         <% }) %>
       </ul>
     </div>
