@@ -8,11 +8,11 @@
 body{
 	display: flex;
 	flex-direction: column;
-	flex-wrap: nowrap;
+	flex-wrap: wrap;
 	justify-content: center;
 	align-items: center;
 	align-content: center;
-    margin-top: 5rem;
+    margin-top: 3rem;
     font-size: 2rem;
 }
 input{
@@ -23,4 +23,9 @@ button{
 }
 #signup-error-p1{
     font-size: 1.2rem;
+}
+#chat-container{
+    max-height: 40rem;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
