@@ -8,7 +8,15 @@
     <link rel="stylesheet" href="css/chat.css">
   </head>
   <body>
-    <h1>Chat</h1>
+    <div id="heading-container">
+      <h1>Chat</h1>
+    </div>
+    <div id="form-container">
+      <form id="text-editor" action="/members-chat" method="POST">
+        <input type="text" name="message" id="message-input-chat" placeholder="Type your message here" required>
+        <button name="send-msg">Send</button>
+      </form>
+    </div>
     <div id="chat-container">
       <ul>
         <% messageBoard.forEach(function(message){ %>
@@ -16,10 +24,6 @@
         <% }) %>
       </ul>
     </div>
-    <form action="/members-chat" method="POST">
-        <input type="text" name="message" id="message-input-chat" placeholder="Type your message here" required>
-        <button name="send-msg">Send</button>
-    </form>
     <a href="logOut">Log Out</a>
 	<script src="index.js"></script>
   </body>
