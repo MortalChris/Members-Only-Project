@@ -16,6 +16,8 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 //password hatcher
 const bcryptjs = require('bcryptjs');
+//date fns
+const { format } = require('date-fns');
 //Passportjs stuff
 // const crypto = require('crypto');
 // const passport = require('passport');
@@ -157,7 +159,7 @@ app.post("/members-chat", async function (req, res, next) {
         res.redirect("error");
         return;
     } else {
-        messageBoard.push({ user: req.session.username.email, text: message , date: new Date()});
+        messageBoard.push({ user: req.session.username.email, text: message , date: format(new Date(), "yyyy-MM-dd HH:mm:ss")});
     }
     console.log(req.session.username.email);
     console.log(messageBoard);
