@@ -4,6 +4,7 @@ const path = require("path");
 const port = 3000;
 const app = express();
 // Express session
+require('dotenv').config();
 const session = require('express-session');
 //ejs
 const ejs = require('ejs');
@@ -101,7 +102,7 @@ let emailExistError = false ;
     });
 
     app.use(session({
-        secret: 'omae wa mou shindeiru',
+        secret: "temppassword",
         resave: true,
         saveUninitialized: true,
         maxAge: 3600000
