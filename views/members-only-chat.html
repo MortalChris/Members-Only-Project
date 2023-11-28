@@ -21,8 +21,7 @@
       <ul>
         <% messageBoard.forEach(function(message){ %>
           <div>
-            <li><%= message.user %>: <%= message.text %></li>
-            <li id="text-output-date"><%= message.date   %>
+            <li><%= message.user %>: <%= message.text %> <span><%= message.date   %></span></li>
           </div>
         <% }) %>
       </ul>
