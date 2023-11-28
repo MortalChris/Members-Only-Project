@@ -25,7 +25,13 @@ button{
     font-size: 1.2rem;
 }
 #chat-container{
+    font-size: 1.4rem;
     max-height: 40rem;
     overflow-x: hidden;
     overflow-y: auto;
+    padding-left: 1rem;
+}
+#text-output-date{
+    font-size: .9rem;
+    color: #221f1f;
 }
