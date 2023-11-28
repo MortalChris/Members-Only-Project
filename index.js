@@ -48,6 +48,13 @@ const UsersModel = mongoose.model('Users', new mongoose.Schema({
     // Add more fields as needed
 }));
 
+//session
+app.use(session({
+    secret: "temppassword",
+    resave: true,
+    saveUninitialized: true,
+    maxAge: 3600000
+}));
 
 //Routes
 app.get('/signUp', function (req, res) {
@@ -66,7 +73,12 @@ app.get('/secretPass', function (req, res) {
     res.render('secret-pass');
 })
 app.get('/chat', function (req, res) {
-    res.render('members-only-chat', {messageBoard: messageBoard});
+    if (req.session.loggedin) { // will return true if user is logged in
+        res.render('members-only-chat', {messageBoard: messageBoard});
+        // next();
+    } else {
+        res.redirect("logIn");
+    }
 })
 
 let emailExistError = false ;
@@ -103,13 +115,6 @@ let emailExistError = false ;
             };
     });
 
-    app.use(session({
-        secret: "temppassword",
-        resave: true,
-        saveUninitialized: true,
-        maxAge: 3600000
-    }));
-    
 
 // Log-in
 app.post("/log-in", async function(req, res){ 
