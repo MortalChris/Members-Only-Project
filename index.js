@@ -157,7 +157,7 @@ app.post("/members-chat", async function (req, res, next) {
         res.redirect("error");
         return;
     } else {
-        messageBoard.push({ user: req.session.username.email, text: message });
+        messageBoard.push({ user: req.session.username.email, text: message , date: new Date()});
     }
     console.log(req.session.username.email);
     console.log(messageBoard);
