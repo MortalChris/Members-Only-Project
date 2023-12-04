@@ -123,7 +123,6 @@ let passwordErrorMsg = "";
                     console.log("Error: Email already exist");
                     emailExistError = true;
                     res.redirect("signUp");
-                    // res.send("Email Already exist");
                 }
         } catch (err) {
             console.log("err");
@@ -140,40 +139,32 @@ app.post("/log-in", async function(req, res){
         console.log(usersEmail);
         if (usersEmail) { //check if password matches 
             const comparePass = await bcryptjs.compare(req.body.password, usersEmail.password);
-            // const comparePass = await UsersModel.findOne({ email: req.body.password });
-            // const result = req.body.password === users.password;
             if (comparePass) {
                 req.session.loggedin = true;
 				req.session.username = usersEmail;
-                // username.push(usersEmail);
                 res.redirect("chat");
             } else {
                 res.redirect("logIn");
                 console.log("password doesn't match");
-                // res.status(400).json({ error: "password doesn't match" });
             }
         } else {
             res.redirect("logIn");
             console.log("User doesn't exist");
-            // res.status(400).json({ error: "User doesn't exist" });
         }
     } catch (error) { 
         console.log(error)
         res.redirect("error");
-        // res.status(400).json({ error }); 
     } 
 }); 
 
 //Log out
 app.post("/log-out", async function (req, res) { 
-    // username = "";
     req.session.loggedin = false;
     req.session.username = "";
     res.redirect(signUp);
 })
 
 //Message Board
-// const username = [];
 const messageBoard = [];
 app.post("/members-chat", async function (req, res, next) {
     const message = req.body.message;
