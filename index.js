@@ -58,7 +58,7 @@ app.use(session({
 
 //Routes
 app.get('/signUp', function (req, res) {
-    res.render('sign-up', {emailExistError: emailExistError, errorMsg: "Email already exist"});
+    res.render('sign-up', { emailExistError: emailExistError, errorMsg: "Email already exist", passwordErrorMsg: passwordErrorMsg });
 })
 app.get('/error', function (req, res) {
     res.render('errorSignUp');
@@ -81,15 +81,32 @@ app.get('/chat', function (req, res) {
     }
 })
 
-let emailExistError = false ;
+let emailExistError = false;
+let passwordErrorMsg = "";
 //Sign Up
     app.post("/sign-up", async (req, res, next) => {//Post needs to be the same as the file page location
         try {
                 if (req.body.password != req.body.confirmPassword ) {
-                    console.log("Password and Confirm Password do not match");
-                    res.redirect("error");
+                    passwordErrorMsg = "Password and Confirm Password do not match";
+                    res.redirect("signUp");
                     return;
-                }
+                } else if(req.body.password.search(/[a-z]/) < 0){
+                    passwordErrorMsg = "Password must contain atleast one lowercase letter";
+                    res.redirect("signUp");
+                    return;
+                } else if (req.body.password.search(/[A-Z]/) < 0) {
+                    passwordErrorMsg = "Password must contain atleast one upercase letter";
+                    res.redirect("signUp");
+                    return;
+                } else if (req.body.password.search(/[0-9]/) < 0) {
+                    passwordErrorMsg = "Password must contain atleast one number";
+                    res.redirect("signUp");
+                    return;
+            }
+            //Reset msg
+            console.log("Password was entered correctly");
+            passwordErrorMsg = "";
+
             const hashedPassword = await bcryptjs.hash(req.body.password, 13);
             const users = new UsersModel({
                 email: req.body.email,
