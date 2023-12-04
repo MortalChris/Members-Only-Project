@@ -18,11 +18,6 @@ const bodyParser = require('body-parser');
 const bcryptjs = require('bcryptjs');
 //date fns
 const { format } = require('date-fns');
-//Passportjs stuff
-// const crypto = require('crypto');
-// const passport = require('passport');
-// const LocalStrategy = require('passport-local');
-// const passportLocalMongoose = require('passport-local-mongoose');
 
 //Body parser stuff
 app.use(bodyParser.urlencoded({ extended: true }));
